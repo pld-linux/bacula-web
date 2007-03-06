@@ -8,7 +8,7 @@ Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/bacula/%{name}-%{version}.tar.gz
 # Source0-md5:	8ac3ed8f4eaf1809bd110b70d966157a
 URL:		http://www.bacula.org/
-BuildArc:	noarch
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/bacula

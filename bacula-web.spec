@@ -20,8 +20,14 @@ computers.
 
 Sets of various Bacula GUIs.
 
+%description -l pl.UTF-8
+Bacula przychodzi nocą i wysysa żywotny ekstrakt z komputerów.
+
+Zbiór różnych graficzych interfejsów do Baculi.
+
 %package bimagemgr
 Summary:	A utility to monitor and burn file backups to CDR
+Summary(pl.UTF-8):	Narzędzie do monitorowania i wypalania kopii zapasowych na CDR
 Group:		Networking/Utilities
 Requires(post):	sed >= 4.0
 Requires(post,preun):	/sbin/chkconfig
@@ -37,65 +43,82 @@ Requires:	perl-DBI
 %description bimagemgr
 A utility to monitor and burn file backups to CDR.
 
+%description bimagemgr -l pl.UTF-8
+Narzędzie do monitorowania i wypalania kopii zapasowych na CDR.
+
 %package web
 Summary:	Bacula web base structure
+Summary(pl.UTF-8):	Struktura bazowa WWW dla Baculi
 Group:		Networking/Utilities
 Requires(post):	sed >= 4.0
-Requires:	%{name}-common = %{epoch}:%{version}-%{release}
+Requires:	%{name}-common = %{version}-%{release}
 Obsoletes:	bacula-updatedb
 
 %description web
-Bacula - It comes by night and sucks the vital essence from your
-computers.
-
 Base structure for Bacula web apps.
+
+%description web -l pl.UTF-8
+Struktura bazowa WWW dla Baculi.
 
 %package libweb
 Summary:	Bacula web library
+Summary(pl.UTF-8):	Biblioteka WWW Baculi
 Group:		Networking/Utilities
 Requires(post):	sed >= 4.0
-Requires:	%{name}-common = %{epoch}:%{version}-%{release}
+Requires:	%{name}-common = %{version}-%{release}
 
 %description libweb
-Bacula - It comes by night and sucks the vital essence from your
-computers.
-
 Bacula web library.
 
+%description libweb -l pl.UTF-8
+Biblioteka WWW Baculi.
+
 %package brestore
-Summary:	A restoration GUI in Perl/GTK
+Summary:	A restoration GUI in Perl/GTK+
+Summary(pl.UTF-8):	GUI do odzyskiwania danych w Perlu/GTK+
 Group:		Networking/Utilities
 Requires(post):	sed >= 4.0
-Requires:	%{name}-common = %{epoch}:%{version}-%{release}
+Requires:	%{name}-common = %{version}-%{release}
 
 %description brestore
-Bacula - It comes by night and sucks the vital essence from your
-computers.
+A restoration GUI for Bacula developed using Perl/GTK+.
 
-A restoration GUI for bacula, we developed a simple Perl/GTK GUI.
+It has the following features:
+ - Direct SQL access to the database for good performance
+ - Fast Time Navigation (switch almost instantaneously between the
+   different versions of a directory, by changing the date from a list)
+ - Possibility to choose a selected file, then browse all its available
+   versions, and see directly if these versions are online in a library
+   or not
+ - Simple restoration by the generation of a BSR file
+ - Works with either PostgreSQL or MySQL
 
-It has the following features :
-    - Direct SQL access to the database for good performance
-    - Fast Time Navigation (switch almost instantaneously between the
-      different versions of a directory, by changing the date from a list)
-    - Possibility to choose a selected file, then browse all its available
-      versions, and see directly if these versions are online in a library
-      or not
-    - Simple restoration by the generation of a BSR file
-    - Works with either PostgreSQL or MySQL
+%description brestore -l pl.UTF-8
+GUI do odzyskiwania danych dla Baculi stworzone z użyciem Perla/GTK+.
 
+Ma następujące możliwości:
+ - bezpośredni dostęp SQL do bazy danych dla uzyskania dobrej
+   wydajności
+ - szybką nawigację w czasie (prawie natychmiastowe przełączanie
+   między różnymi wersjami katalogu poprzez zmianę daty z listy)
+ - możliwość wyboru zaznaczonego pliku, a następnie przeglądanie
+   dostępnych wersji i oglądanie bezpośrednio, czy wersje są w
+   bibliotece
+ - proste odzyskiwanie poprzez generowanie pliku BSR
+ - działa z PostgreSQL-em lub MySQL-em
 
 %package bweb
 Summary:	A Bacula web interface
+Summary(pl.UTF-8):	Interfejs WWW do Baculi
 Group:		Networking/Utilities
 Requires(post):	sed >= 4.0
-Requires:	%{name}-common = %{epoch}:%{version}-%{release}
+Requires:	%{name}-common = %{version}-%{release}
 
 %description bweb
-Bacula - It comes by night and sucks the vital essence from your
-computers.
-
 A Bacula web interface.
+
+%description bweb -l pl.UTF-8
+Interfejs WWW do Baculi.
 
 %prep
 %setup -q -a 1
@@ -105,7 +128,6 @@ A Bacula web interface.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 
 %clean
 rm -rf $RPM_BUILD_ROOT

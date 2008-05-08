@@ -121,7 +121,7 @@ A Bacula web interface.
 Interfejs WWW do Baculi.
 
 %prep
-%setup -q -a 1
+%setup -q
 
 %build
 # no building; yes there is configure file there but it's useless

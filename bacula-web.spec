@@ -5,7 +5,7 @@ Summary:	Bacula - The Network Backup Solution
 Summary(pl.UTF-8):	Bacula - rozwiązanie do wykonywania kopii zapasowych po sieci
 Name:		bacula-gui
 Version:	2.4.4
-Release:	0.10
+Release:	0.11
 License:	Extended GPL v2
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/bacula/%{name}-%{version}.tar.gz
@@ -41,7 +41,8 @@ Summary:	A Bacula web interface
 Summary(pl.UTF-8):	Interfejs WWW do Baculi
 Group:		Applications/WWW
 Requires:	Smarty
-Requires:	phplot
+# system pkg phplot causes dead loop
+#Requires:	phplot
 Requires:	php-pear-DB
 Requires:	php-gd
 Requires:	smarty-gettext
@@ -60,6 +61,11 @@ WWW dla Baculi.
 cd bacula-web
 install -d smarty-plugins
 mv external_packages/smarty/plugins/modifier.fsize_format.php smarty-plugins
+
+# system pkg causes dead loop, keep it up cleanup first
+mv external_packages/phplot .
+rm -rf phplot/{doc,examples,LICENSE*,ChangeLog,README}
+
 rm -rf templates_c external_packages configs/.htaccess test.php messages*.po array_fill.func.php
 
 %install

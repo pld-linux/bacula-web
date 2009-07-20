@@ -1,18 +1,29 @@
+# TODO
+# - package other GUI's:
+#   bimagemgr/ brestore/ bweb/
 Summary:	Bacula - The Network Backup Solution
 Summary(pl.UTF-8):	Bacula - rozwiązanie do wykonywania kopii zapasowych po sieci
 Name:		bacula-gui
-Version:	2.4.3
-Release:	0.1
+Version:	2.4.4
+Release:	0.10
 License:	Extended GPL v2
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/bacula/%{name}-%{version}.tar.gz
-# Source0-md5:	dd10723cd6ebfcb307b0f39dc8bcdd45
+# Source0-md5:	1bf3cf1b9b51caaddf2468485044cd36
+Patch0:		bacula-web.patch
+Source1:	bacula-web.conf
 URL:		http://www.bacula.org/
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_sysconfdir	/etc/bacula
-%define		_localstatedir	/var/lib/bacula
+%define		_webapps	/etc/webapps
+%define		_webapp		bacula-web
+%define		_sysconfdir	%{_webapps}/%{_webapp}
+%define		_appdir		%{_datadir}/%{_webapp}
+%define		_cachedir	/var/cache/%{_webapp}
+%define		_smartyplugindir	%{php_data_dir}/Smarty/plugins
+%define		_localedir		%{_datadir}/locale
 
 %description
 Bacula - It comes by night and sucks the vital essence from your
@@ -25,124 +36,82 @@ Bacula przychodzi nocą i wysysa żywotny ekstrakt z komputerów.
 
 Zbiór różnych graficzych interfejsów do Baculi.
 
-%package bimagemgr
-Summary:	A utility to monitor and burn file backups to CDR
-Summary(pl.UTF-8):	Narzędzie do monitorowania i wypalania kopii zapasowych na CDR
-Group:		Networking/Utilities
-Requires(post):	sed >= 4.0
-Requires(post,preun):	/sbin/chkconfig
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
-Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/usr/sbin/useradd
-Requires:	bacula-server
-Requires:	cdrecord
-Requires:	mkisofs
-Requires:	perl-DBI
-
-%description bimagemgr
-A utility to monitor and burn file backups to CDR.
-
-%description bimagemgr -l pl.UTF-8
-Narzędzie do monitorowania i wypalania kopii zapasowych na CDR.
-
-%package web
-Summary:	Bacula web base structure
-Summary(pl.UTF-8):	Struktura bazowa WWW dla Baculi
-Group:		Networking/Utilities
-Requires(post):	sed >= 4.0
-Requires:	%{name}-common = %{version}-%{release}
-Obsoletes:	bacula-updatedb
-
-%description web
-Base structure for Bacula web apps.
-
-%description web -l pl.UTF-8
-Struktura bazowa WWW dla Baculi.
-
-%package libweb
-Summary:	Bacula web library
-Summary(pl.UTF-8):	Biblioteka WWW Baculi
-Group:		Networking/Utilities
-Requires(post):	sed >= 4.0
-Requires:	%{name}-common = %{version}-%{release}
-
-%description libweb
-Bacula web library.
-
-%description libweb -l pl.UTF-8
-Biblioteka WWW Baculi.
-
-%package brestore
-Summary:	A restoration GUI in Perl/GTK+
-Summary(pl.UTF-8):	GUI do odzyskiwania danych w Perlu/GTK+
-Group:		Networking/Utilities
-Requires(post):	sed >= 4.0
-Requires:	%{name}-common = %{version}-%{release}
-
-%description brestore
-A restoration GUI for Bacula developed using Perl/GTK+.
-
-It has the following features:
- - Direct SQL access to the database for good performance
- - Fast Time Navigation (switch almost instantaneously between the
-   different versions of a directory, by changing the date from a list)
- - Possibility to choose a selected file, then browse all its available
-   versions, and see directly if these versions are online in a library
-   or not
- - Simple restoration by the generation of a BSR file
- - Works with either PostgreSQL or MySQL
-
-%description brestore -l pl.UTF-8
-GUI do odzyskiwania danych dla Baculi stworzone z użyciem Perla/GTK+.
-
-Ma następujące możliwości:
- - bezpośredni dostęp SQL do bazy danych dla uzyskania dobrej
-   wydajności
- - szybką nawigację w czasie (prawie natychmiastowe przełączanie
-   między różnymi wersjami katalogu poprzez zmianę daty z listy)
- - możliwość wyboru zaznaczonego pliku, a następnie przeglądanie
-   dostępnych wersji i oglądanie bezpośrednio, czy wersje są w
-   bibliotece
- - proste odzyskiwanie poprzez generowanie pliku BSR
- - działa z PostgreSQL-em lub MySQL-em
-
-%package bweb
+%package -n bacula-web
 Summary:	A Bacula web interface
 Summary(pl.UTF-8):	Interfejs WWW do Baculi
-Group:		Networking/Utilities
-Requires(post):	sed >= 4.0
-Requires:	%{name}-common = %{version}-%{release}
+Group:		Applications/WWW
+Requires:	Smarty
+Requires:	phplot
+Requires:	php-pear-DB
+Requires:	php-gd
+Requires:	smarty-gettext
+Requires:	webapps
 
-%description bweb
-A Bacula web interface.
+%description -n bacula-web
+Bacula web apps.
 
-%description bweb -l pl.UTF-8
-Interfejs WWW do Baculi.
+%description -n bacula-web -l pl.UTF-8
+WWW dla Baculi.
 
 %prep
 %setup -q
+%patch0 -p1
 
-%build
-# no building; yes there is configure file there but it's useless
+cd bacula-web
+install -d smarty-plugins
+mv external_packages/smarty/plugins/modifier.fsize_format.php smarty-plugins
+rm -rf templates_c external_packages configs/.htaccess test.php messages*.po array_fill.func.php
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir},%{_cachedir},%{_smartyplugindir},%{_localedir}}
+
+cd bacula-web
+cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+cp -a . $RPM_BUILD_ROOT%{_appdir}
+cp -a smarty-plugins/* $RPM_BUILD_ROOT%{_smartyplugindir}
+mv $RPM_BUILD_ROOT{%{_appdir}/configs/*,%{_sysconfdir}}
+rm $RPM_BUILD_ROOT%{_appdir}/{tsmarty2c.php,ChangeLog,CONTACT,README,TODO,COPYING}
+rm -rf $RPM_BUILD_ROOT%{_appdir}/{locale,smarty-plugins}
+for a in locale/*/LC_MESSAGES/*.mo; do
+	l=${a#locale/}; l=${l%/LC_MESSAGES/*.mo}
+	install -d $RPM_BUILD_ROOT%{_localedir}/$l/LC_MESSAGES
+	cp -a $a $RPM_BUILD_ROOT%{_localedir}/$l/LC_MESSAGES/bacula-web.mo
+	echo "%%lang($l) %{_localedir}/$l/LC_MESSAGES/bacula-web.mo" >> bacula-web.lang
+done
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files bimagemgr
-%defattr(644,root,root,755)
+%post -n bacula-web
+# cleanup cache from previous rpm
+echo %{_cachedir}/*.tpl.php | xargs rm -f
 
-%files web
-%defattr(644,root,root,755)
+%preun
+if [ "$1" = 0 ]; then
+	echo %{_cachedir}/*.tpl.php | xargs rm -f
+fi
 
-%files libweb
-%defattr(644,root,root,755)
+%triggerin -n bacula-web -- apache1 < 1.3.37-3, apache1-base
+%webapp_register apache %{_webapp}
 
-%files brestore
-%defattr(644,root,root,755)
+%triggerun -n bacula-web -- apache1 < 1.3.37-3, apache1-base
+%webapp_unregister apache %{_webapp}
 
-%files bweb
+%triggerin -n bacula-web -- apache < 2.2.0, apache-base
+%webapp_register httpd %{_webapp}
+
+%triggerun -n bacula-web -- apache < 2.2.0, apache-base
+%webapp_unregister httpd %{_webapp}
+
+%files -n bacula-web -f bacula-web/bacula-web.lang
 %defattr(644,root,root,755)
+%doc bacula-web/{ChangeLog,CONTACT,README,TODO}
+%dir %attr(750,root,http) %{_sysconfdir}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
+%attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/bacula.conf
+%{_appdir}
+%{_smartyplugindir}/*.php
+%dir %attr(730,root,http) %{_cachedir}

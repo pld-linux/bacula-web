@@ -49,8 +49,8 @@
 -?>
 \ No newline at end of file
 +?>
---- ./bacula-web/classes.inc	2009-07-20 18:57:32.147464445 +0300
-+++ ./bacula-web/classes.inc	2009-07-20 19:12:27.596925323 +0300
+--- ./bacula-web/classes.inc	2009-07-20 19:12:27.596925323 +0300
++++ ./bacula-web/classes.inc	2009-07-20 19:33:45.586192459 +0300
 @@ -15,7 +15,7 @@
  +-------------------------------------------------------------------------+ 
  */
@@ -60,7 +60,18 @@
  define('CONFIG_FILE', "bacula.conf");
  define('BACULA_TYPE_BYTES_FILES', 1);
  define('BACULA_TYPE_FILES_JOBID', 2);
-@@ -187,7 +187,7 @@
+@@ -25,10 +25,6 @@
+ require_once "DB.php";                                                                                                                  // Pear DB
+ require_once($smarty_path."Config_File.class.php");
+ 
+-if (!function_exists('array_fill')) {                                                                                   // For PHP < 4.2.0 users 
+-    require_once('array_fill.func.php');
+-}
+-
+ class Bweb extends DB {
+ 
+         var $StartDate;
+@@ -187,7 +183,7 @@
          
                  global $type;
          

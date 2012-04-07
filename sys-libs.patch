@@ -1,0 +1,23 @@
+--- bacula-web-5.2.2/config/global.inc.php~	2011-12-04 15:14:21.000000000 +0200
++++ bacula-web-5.2.2/config/global.inc.php	2012-04-07 14:43:17.230952000 +0300
+@@ -18,8 +18,8 @@
+  define( 'BW_OBJ', BW_ROOT . '/core/' ); 
+  define( 'BW_EXTERNAL', BW_OBJ . 'external' );
+  
+- define( 'BW_PHPLOT', BW_EXTERNAL . '/phplot/'  );					
+- define( 'BW_SMARTY', BW_EXTERNAL . '/smarty/libs/' );				
++ define( 'BW_PHPLOT', '/usr/share/php/phplot/'  );					
++ define( 'BW_SMARTY', '/usr/share/php/Smarty/' );				
+  define( 'BW_SMARTY_GETTEXT', BW_EXTERNAL . '/smarty_gettext-0.9/' );
+  
+  
+@@ -27,8 +27,7 @@
+  require_once BW_OBJ . "bweb.inc.php";
+  
+  // Template engine
+- require_once( BW_SMARTY . "Smarty.class.php");			
+- require_once( BW_SMARTY_GETTEXT . "smarty_gettext.php" );		
++ require_once( "Smarty.class.php");			
+  
+  // Configuration 
+  require_once BW_OBJ . "cfg/config.class.php";

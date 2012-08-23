@@ -3,7 +3,7 @@
 Summary:	Open source monitoring and reporting tool for Bacula
 Name:		bacula-web
 Version:	5.2.2
-Release:	5
+Release:	6
 License:	GPL v2
 Group:		Applications/WWW
 URL:		http://www.bacula-web.org/
@@ -16,10 +16,10 @@ BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 Requires:	Smarty
 Requires:	Smarty-plugin-gettext
+Requires:	php(core) >= %{php_min_version}
 Requires:	php(gd)
 Requires:	php(gettext)
 Requires:	php(pdo)
-Requires:	php-common >= 4:%{php_min_version}
 Requires:	phplot
 Requires:	webserver(php)
 BuildArch:	noarch

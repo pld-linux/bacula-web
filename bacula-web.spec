@@ -47,8 +47,10 @@ information from your bacula catalog's database.
 %patch0 -p1
 
 mv config/config.php{.sample,}
-rm locale/*/LC_MESSAGES/*.po
+%{__rm} locale/*/LC_MESSAGES/*.po
 mv core/external .
+
+%{__rm} -r templates_c
 
 %install
 rm -rf $RPM_BUILD_ROOT

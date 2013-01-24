@@ -22,7 +22,6 @@ Requires:	php(core) >= %{php_min_version}
 Requires:	php(gd)
 Requires:	php(gettext)
 Requires:	php(pdo)
-Requires:	php(pdo)
 Requires:	php(session)
 Requires:	phplot
 Requires:	webserver(php)

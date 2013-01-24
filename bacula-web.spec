@@ -1,18 +1,20 @@
-%define		php_min_version 5.2.4
+# TODO
+# - lighttpd support
+%define		php_min_version 5.3.4
 %include	/usr/lib/rpm/macros.php
 Summary:	Open source monitoring and reporting tool for Bacula
 Name:		bacula-web
-Version:	5.2.2
-Release:	6
+Version:	5.2.11
+Release:	1
 License:	GPL v2
 Group:		Applications/WWW
 URL:		http://www.bacula-web.org/
-Source0:	http://www.bacula-web.org/tl_files/downloads/%{name}.%{version}.tar.gz
-# Source0-md5:	b52253963cc6edb6437a0dbe59c6051f
+Source0:	http://www.bacula-web.org/tl_files/downloads/%{name}-%{version}.tar.gz
+# Source0-md5:	4826b11bc351491a18edc07650c85f73
 Source1:	apache.conf
 Patch0:		sys-libs.patch
 BuildRequires:	rpm-php-pearprov >= 4.4.2-11
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.654
 BuildRequires:	sed >= 4.0
 Requires:	Smarty
 Requires:	Smarty-plugin-gettext
@@ -20,8 +22,14 @@ Requires:	php(core) >= %{php_min_version}
 Requires:	php(gd)
 Requires:	php(gettext)
 Requires:	php(pdo)
+Requires:	php(pdo)
+Requires:	php(session)
 Requires:	phplot
 Requires:	webserver(php)
+# Any of the db drivers needed depending where you hold your Bacula DB
+Suggests:	php-pdo-mysql
+Suggests:	php-pdo-pgsql
+Suggests:	php-pdo-sqlite
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -46,21 +54,22 @@ information from your bacula catalog's database.
 %setup -qc
 %patch0 -p1
 
+mv application/config .
 mv config/config.php{.sample,}
-%{__rm} locale/*/LC_MESSAGES/*.po
+%{__rm} application/locale/*/LC_MESSAGES/*.po
+%{__rm} -r application/view/cache
 mv core/external .
+mv docs/* .
 
-%{__rm} -r templates_c
+# you'll need this if you cp -a complete dir in source
+# cleanup backups after patching
+find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir},%{cachedir}}
-cp -a *.php core locale style templates $RPM_BUILD_ROOT%{_appdir}
-
+cp -a *.php application core $RPM_BUILD_ROOT%{_appdir}
 cp -a config/* $RPM_BUILD_ROOT%{_sysconfdir}
-ln -s %{_sysconfdir} $RPM_BUILD_ROOT%{_appdir}/config
-
-ln -s %{cachedir} $RPM_BUILD_ROOT%{_appdir}/templates_c
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 cp -p $RPM_BUILD_ROOT%{_sysconfdir}/{apache,httpd}.conf
@@ -91,27 +100,24 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc INSTALL README
+%doc INSTALL README Changelog
 %dir %attr(750,root,http) %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/config.php
-%attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/global.inc.php
 
 %dir %{_appdir}
 %{_appdir}/backupjob-report.php
 %{_appdir}/client-report.php
 %{_appdir}/index.php
+%{_appdir}/joblogs.php
 %{_appdir}/jobs.php
 %{_appdir}/pools.php
 %{_appdir}/test.php
-%{_appdir}/config
-%{_appdir}/style
-%{_appdir}/templates
-%{_appdir}/templates_c
 
 %dir %{_appdir}/core
 %{_appdir}/core/bweb.inc.php
+%{_appdir}/core/global.inc.php
 %{_appdir}/core/app
 %{_appdir}/core/cfg
 %{_appdir}/core/db
@@ -119,12 +125,18 @@ fi
 %{_appdir}/core/i18n
 %{_appdir}/core/utils
 
-%dir %{_appdir}/locale
-%lang(de) %{_appdir}/locale/de_DE
-%lang(en) %{_appdir}/locale/en_EN
-%lang(es) %{_appdir}/locale/es_ES
-%lang(fr) %{_appdir}/locale/fr_FR
-%lang(it) %{_appdir}/locale/it_IT
-%lang(sv) %{_appdir}/locale/sv_SV
+%dir %{_appdir}/application
+%{_appdir}/application/libs
+%{_appdir}/application/models
+%{_appdir}/application/view
+
+%dir %{_appdir}/application/locale
+%lang(de) %{_appdir}/application/locale/de_DE
+%lang(en) %{_appdir}/application/locale/en_EN
+%lang(es) %{_appdir}/application/locale/es_ES
+%lang(fr) %{_appdir}/application/locale/fr_FR
+%lang(it) %{_appdir}/application/locale/it_IT
+%lang(pt_BR) %{_appdir}/application/locale/pt_BR
+%lang(sv) %{_appdir}/application/locale/sv_SV
 
 %dir %attr(775,root,http) %{cachedir}

@@ -4,15 +4,15 @@
 %include	/usr/lib/rpm/macros.php
 Summary:	Open source monitoring and reporting tool for Bacula
 Name:		bacula-web
-Version:	5.2.11
+Version:	5.2.12
 Release:	1
 License:	GPL v2
 Group:		Applications/WWW
-URL:		http://www.bacula-web.org/
 Source0:	http://www.bacula-web.org/tl_files/downloads/%{name}-%{version}.tar.gz
-# Source0-md5:	4826b11bc351491a18edc07650c85f73
+# Source0-md5:	6d3d212a9d145f8d112ce15f5a40538d
 Source1:	apache.conf
 Patch0:		sys-libs.patch
+URL:		http://www.bacula-web.org/
 BuildRequires:	rpm-php-pearprov >= 4.4.2-11
 BuildRequires:	rpmbuild(macros) >= 1.654
 BuildRequires:	sed >= 4.0

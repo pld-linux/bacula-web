@@ -11,6 +11,7 @@ Group:		Applications/WWW
 Source0:	http://www.bacula-web.org/tl_files/downloads/%{name}-%{version}.tar.gz
 # Source0-md5:	6d3d212a9d145f8d112ce15f5a40538d
 Source1:	apache.conf
+Source2:	httpd.conf
 Patch0:		sys-libs.patch
 URL:		http://www.bacula-web.org/
 BuildRequires:	rpm-php-pearprov >= 4.4.2-11
@@ -29,6 +30,7 @@ Requires:	webserver(php)
 Suggests:	php-pdo-mysql
 Suggests:	php-pdo-pgsql
 Suggests:	php-pdo-sqlite
+Conflicts:	apache-base < 2.4.0-1
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -71,7 +73,7 @@ cp -a *.php application core $RPM_BUILD_ROOT%{_appdir}
 cp -a config/* $RPM_BUILD_ROOT%{_sysconfdir}
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
-cp -p $RPM_BUILD_ROOT%{_sysconfdir}/{apache,httpd}.conf
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -91,10 +93,10 @@ fi
 %triggerun -- apache1 < 1.3.37-3, apache1-base
 %webapp_unregister apache %{_webapp}
 
-%triggerin -- apache < 2.2.0, apache-base
+%triggerin -- apache-base
 %webapp_register httpd %{_webapp}
 
-%triggerun -- apache < 2.2.0, apache-base
+%triggerun -- apache-base
 %webapp_unregister httpd %{_webapp}
 
 %files

@@ -5,7 +5,7 @@
 Summary:	Open source monitoring and reporting tool for Bacula
 Name:		bacula-web
 Version:	5.2.12
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Applications/WWW
 Source0:	http://www.bacula-web.org/tl_files/downloads/%{name}-%{version}.tar.gz

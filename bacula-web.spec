@@ -4,12 +4,12 @@
 %include	/usr/lib/rpm/macros.php
 Summary:	Open source monitoring and reporting tool for Bacula
 Name:		bacula-web
-Version:	5.2.12
+Version:	6.0.0
 Release:	4
 License:	GPL v2
 Group:		Applications/WWW
-Source0:	http://www.bacula-web.org/tl_files/downloads/%{name}-%{version}.tar.gz
-# Source0-md5:	6d3d212a9d145f8d112ce15f5a40538d
+Source0:	http://www.bacula-web.org/download/articles/bacula-web-600.html?file=files/bacula-web.org/downloads/%{name}-%{version}.tgz
+# Source0-md5:	3e99f9626cf4329ce43947f11a9d8f49
 Source1:	apache.conf
 Patch0:		sys-libs.patch
 URL:		http://www.bacula-web.org/
@@ -50,7 +50,7 @@ summarized view of your bacula's backup infrastructure. It obtain his
 information from your bacula catalog's database.
 
 %prep
-%setup -qc
+%setup -q
 %patch0 -p1
 
 mv application/config .
@@ -58,7 +58,7 @@ mv config/config.php{.sample,}
 %{__rm} application/locale/*/LC_MESSAGES/*.po
 %{__rm} -r application/view/cache
 mv core/external .
-mv docs/* .
+mv DOCS/* .
 
 # you'll need this if you cp -a complete dir in source
 # cleanup backups after patching
@@ -115,7 +115,8 @@ fi
 %{_appdir}/test.php
 
 %dir %{_appdir}/core
-%{_appdir}/core/bweb.inc.php
+%{_appdir}/core/bweb.class.php
+%{_appdir}/core/const.inc.php
 %{_appdir}/core/global.inc.php
 %{_appdir}/core/app
 %{_appdir}/core/db
@@ -134,6 +135,7 @@ fi
 %lang(es) %{_appdir}/application/locale/es_ES
 %lang(fr) %{_appdir}/application/locale/fr_FR
 %lang(it) %{_appdir}/application/locale/it_IT
+%lang(nl) %{_appdir}/application/locale/nl_NL
 %lang(pt_BR) %{_appdir}/application/locale/pt_BR
 %lang(sv) %{_appdir}/application/locale/sv_SV
 

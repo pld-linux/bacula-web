@@ -1,7 +1,6 @@
 # TODO
 # - lighttpd support
 %define		php_min_version 5.3.4
-%include	/usr/lib/rpm/macros.php
 Summary:	Open source monitoring and reporting tool for Bacula
 Name:		bacula-web
 Version:	6.0.0

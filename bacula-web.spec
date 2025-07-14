@@ -50,7 +50,7 @@ information from your bacula catalog's database.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P0 -p1
 
 mv application/config .
 mv config/config.php{.sample,}
